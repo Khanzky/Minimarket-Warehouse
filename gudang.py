@@ -128,12 +128,7 @@ def Delete_SC():
     show_Tabel_SC(Stock_Card, Format_SC,titleSC)
 
 def Update_Data_SC():
-    tanggal = pyip.inputStr(prompt='Masukan Tanggal Transaksi (YYYY/MM/DD) : ', blockRegexes=[r'[a-zA-Z]'])
-    jenis_transaksi = pyip.inputStr(prompt='Masukkan Jenis Transaksi : ', applyFunc=lambda x: x.capitalize(), blockRegexes=[r'[0-9]'])
-    qty = pyip.inputInt(prompt='Masukan Qty Barang :', blockRegexes=[r'[a-zA-Z]'], greaterThan=0),
-    kode_barang = pyip.inputInt(prompt='Masukkan Kode Barang : ', greaterThan=0,blockRegexes=[r'[a-zA-Z]']) 
-    harga = pyip.inputInt(prompt='Masukan Harga Barang :', blockRegexes= float and [r'[a-zA-Z]'], greaterThan=000)
-    stock_balance = pyip.inputInt(prompt='Masukan Stock Barang :', blockRegexes= float and [r'[a-zA-Z]'], greaterThan=0)
+
     
     while True:
         prompt = "Masukkan angka menu yang ingin dijalankan:\n"
@@ -146,6 +141,7 @@ def Update_Data_SC():
         response = input(prompt)
 
         if response == '1':
+                    print('halo')
                     show_List_Barang(ListBarang, FuncFormat)
         elif response == '2':
             for key, value in Stock_Card.copy.items():
