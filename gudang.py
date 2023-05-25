@@ -44,16 +44,6 @@ def show_Tabel_SC(Dict, Format_SC, titleSC):
         print(Format_SC.format("", *value))
 
 def Sub_Menu():
-    ListBarang = {
-        'column': ["Index", "Kode Barang", "Nama Barang", "Jenis Barang", "Stock Terkini", "Level Stock"],
-        'barang1': [0, 101, "Mie Instan", "Makanan", 100, "low stock"],
-        'barang2': [1, 102, "Sereal", "Makanan", 150, "available"],
-        'barang3': [2, 201, "Susu", "Minuman", 150, "available"],
-        'barang4': [3, 202, "Kopi", "Minuman", 150, "available"],
-    }
-
-    FuncFormat = "{:<4}" + "{:<8}" + "{:<15}" + "{:<15}" + "{:<15}"+ "{:<15}"+ "{:<15}"
-
     while True:
         prompt = "Masukkan angka menu yang ingin dijalankan:\n"
         ListMenu = [
@@ -69,9 +59,9 @@ def Sub_Menu():
         elif response == '2':
             show_Tabel_SC(Stock_Card, Format_SC, titleSC)
         elif response == '3':
-            sys.exit()
+            Main_Menu()
 
-def Add_SC(): #kurang menampilkan balik ke main menu dan print transaksi sudah ada tdk dapat ditampilkan
+def Add_SC():
     # update data stock card
     tanggal = pyip.inputStr(prompt='Masukan Tanggal Transaksi (YYYY/MM/DD) : ', blockRegexes=[r'[a-zA-Z]'])
     jenis_transaksi = pyip.inputStr(prompt='Masukkan Jenis Transaksi : ', applyFunc=lambda x: x.title(), blockRegexes=[r'[0-9]'])
@@ -89,7 +79,7 @@ def Add_SC(): #kurang menampilkan balik ke main menu dan print transaksi sudah a
         else:    
             kode_barang = pyip.inputInt(prompt='Masukkan Kode Barang : ', greaterThan=0,blockRegexes=[r'[a-zA-Z]']) 
             harga = pyip.inputInt(prompt='Masukan Harga Barang :', blockRegexes= float and [r'[a-zA-Z]'], greaterThan=000)
-            stock_balance = pyip.inputInt(prompt='Masukan Stock Barang :', blockRegexes= float and [r'[a-zA-Z]'], greaterThan=0)
+            stock_balance = pyip.inputInt(prompt='Masukan Stock Balance :', blockRegexes= float and [r'[a-zA-Z]'], greaterThan=0)
             add = pyip.inputYesNo(prompt="\nIngin menambahkan data?(yes/no): ")
             if add == 'yes':
                 index = len(Stock_Card) - 1
@@ -110,6 +100,7 @@ def Add_SC(): #kurang menampilkan balik ke main menu dan print transaksi sudah a
                 break      
     # Menampilkan daftar stock data terbaru
     show_Tabel_SC(Stock_Card, Format_SC,titleSC)
+    Main_Menu()
 
 def Delete_SC():
     # Input indeks SC yang akan dihapus
@@ -143,20 +134,51 @@ def Update_Data_SC():
     kode_barang = pyip.inputInt(prompt='Masukkan Kode Barang : ', greaterThan=0,blockRegexes=[r'[a-zA-Z]']) 
     harga = pyip.inputInt(prompt='Masukan Harga Barang :', blockRegexes= float and [r'[a-zA-Z]'], greaterThan=000)
     stock_balance = pyip.inputInt(prompt='Masukan Stock Barang :', blockRegexes= float and [r'[a-zA-Z]'], greaterThan=0)
-    for key, value in Stock_Card.copy.items():
-        if key == 'column':
-            continue
-        elif jenis_transaksi in value:
-            Stock_Card[key][1] = tanggal
-            Stock_Card[key][2] = kode_barang
-            Stock_Card[key][3] = jenis_transaksi
-            Stock_Card[key][4] = qty
-            Stock_Card[key][5] = harga
-            Stock_Card[key][6] = stock_balance
-            break
-        else:
-            continue
-    show_Tabel_SC(Stock_Card,Format_SC,titleSC)
+    
+    while True:
+        prompt = "Masukkan angka menu yang ingin dijalankan:\n"
+        ListMenu = [
+            "1. Update Stock Terkini",
+            "2. Update Stock card",
+            "3. Back"
+        ]
+        Tampilan_SubMenu_Utama(ListMenu)
+        response = input(prompt)
+
+        if response == '1':
+                    show_List_Barang(ListBarang, FuncFormat)
+        elif response == '2':
+            for key, value in Stock_Card.copy.items():
+                if key == 'column':
+                    continue
+                elif jenis_transaksi in value:
+                    Stock_Card[key][1] = tanggal
+                    Stock_Card[key][2] = kode_barang
+                    Stock_Card[key][3] = jenis_transaksi
+                    Stock_Card[key][4] = qty
+                    Stock_Card[key][5] = harga
+                    Stock_Card[key][6] = stock_balance
+                    break
+                else:
+                    continue
+                    show_Tabel_SC(Stock_Card, Format_SC, titleSC)
+        elif response == '3':
+                    Main_Menu()    
+    
+    # for key, value in Stock_Card.copy.items():
+    #     if key == 'column':
+    #         continue
+    #     elif jenis_transaksi in value:
+    #         Stock_Card[key][1] = tanggal
+    #         Stock_Card[key][2] = kode_barang
+    #         Stock_Card[key][3] = jenis_transaksi
+    #         Stock_Card[key][4] = qty
+    #         Stock_Card[key][5] = harga
+    #         Stock_Card[key][6] = stock_balance
+    #         break
+    #     else:
+    #         continue
+    # show_Tabel_SC(Stock_Card,Format_SC,titleSC)
 
 
 if __name__ == '__main__':
@@ -171,4 +193,14 @@ if __name__ == '__main__':
     
     titleSC = '\n Stock Card \n'
     Format_SC = "{:<4}" + "{:<8}" + "{:<15}" + "{:<15}" + "{:<20}"+ "{:<8}"+ "{:<10}" + "{:<15}"
+    
+    ListBarang = {
+        'column': ["Index", "Kode Barang", "Nama Barang", "Jenis Barang", "Stock Terkini", "Level Stock"],
+        'barang1': [0, 101, "Mie Instan", "Makanan", 100, "low stock"],
+        'barang2': [1, 102, "Sereal", "Makanan", 150, "available"],
+        'barang3': [2, 201, "Susu", "Minuman", 150, "available"],
+        'barang4': [3, 202, "Kopi", "Minuman", 150, "available"],
+    } # yang dibuat fungsi input hanya stock terkini trs level stock dibuat if
+
+    FuncFormat = "{:<4}" + "{:<8}" + "{:<15}" + "{:<15}" + "{:<15}"+ "{:<15}"+ "{:<15}"
     Main_Menu()
