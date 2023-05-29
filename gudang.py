@@ -2,12 +2,14 @@ import sys
 import pyinputplus as pyip
 
 def Main_Menu():
+    global ListBarang
+    global Stock_Card
     print(f'''
--------- Selamat Datang di Gudang Minimarket JCDS --------
+-------- Welcome to The Purwadhika Jogja Warehouse --------
     ''')
     # menginput fitur yang ingin ditampilkan 
-    prompt = "Pilihan Menu Yang Tersedia :\n"
-    choice = ['Menampilkan List Menu', 'Update Data Transaksi dan Stock Card','Add Data Stock Card', 'Delete Data Stock Card', 'Exit']
+    prompt = "Main Menu Options :\n"
+    choice = ['Show menu', 'Update Transaction Data and Stock Card','Add Data Stock Card', 'Delete Data Stock Card', 'Exit']
     response = pyip.inputMenu(prompt=prompt, choices=choice, numbered=True)
     print(response)
     # Fitur menampilkan daftar sub menu
@@ -53,31 +55,61 @@ def show_Tabel_SC(Dict, Format_SC, titleSC, val=0):
                 print(Format_SC.format("", *value)) 
                 break
                 
-
 def Sub_Menu():
     while True:
-        print('\n----------------------------------------------------------\nPilihan Menu Yang Tersedia :\n')
-        prompt = "Masukkan angka menu yang ingin dijalankan: "
+        print('\n----------------------------------------------------------\nShow Menu Options :\n')
+        prompt = "Input the number of the menu you want to run : "
         ListMenu = [
-            "1. Daftar Stock Barang Terkini",
-            "2. Stock Card Product",
-            "3. Back"
+            "1. Status and Current Stock Items",
+            "2. Stock Card (All Product)",
+            "3. Back\n"
         ]
         Tampilan_SubMenu_Utama(ListMenu)
         response = input(prompt)
 
         if response == '1':
-            show_List_Barang(ListBarang, FuncFormat)
+            while True:
+                print('\n----------------------------------------------------------\nStatus and Current Stock Itemn Menu Options :\n')
+                prompt = "Enter the number of the menu you want to run : \n"
+                List_MenuSC = [
+                    "1. Summary of stock items ",
+                    "2. Stock by Barcode Product",
+                    "3. Back"
+                ]
+                Tampilan_SubMenu_Utama(List_MenuSC)
+                response = input(prompt)
+                # Menampilkan All Stock Card
+                if response == '1':
+                    show_List_Barang(ListBarang, FuncFormat)
+                # Mengecek Stock Card Berdasarkan Kode Barang
+                elif response == '2':
+                    print('----- Product Item Code Description -----\n \n101 = Instant Noodles\n102 = Cereal\n201 = Milk\n202 = Coffee\n')
+                    while True:    
+                    # meminta user input primary key
+                        primary_key = pyip.inputInt(prompt='\nInput Product Item Code : ', blockRegexes=[r'[a-zA-Z]'], greaterThan=100)
+                        if primary_key in ListBarang.keys():
+                            print(FuncFormat.format("", *ListBarang['column']))
+                            print(FuncFormat.format("", *ListBarang[primary_key]))
+                            break
+                        else:
+                            print('Barcode does not exist. Please Try Again!')
+                elif response == '3':
+                    break
+                else:
+                    print('Data does not exist.')
         elif response == '2':
-            show_Tabel_SC(Stock_Card, Format_SC, titleSC)
+            show_Tabel_SC(Stock_Card,Format_SC,titleSC)
         elif response == '3':
             Main_Menu()
+        else:
+            print('Data does not exist.')
 
-def Add_SC(): # pada penamabahan data di index ke 5 selalu loncat ke 6 walaupun di index = len(Stock_Card) -1
+def Add_SC(): 
     while True:
-        prompt = "Masukkan angka menu yang ingin dijalankan:\n"
+        print('\n----------------------------------------------------------\nAdd Menu Options :\n')
+        prompt = "Enter the number of the menu you want to run: \n"
         ListMenu = [
-            "1. Add Data Stock Card",
+            "1. Add Stock Card Data",
             "2. Back"
         ]
         Tampilan_SubMenu_Utama(ListMenu)
@@ -86,32 +118,32 @@ def Add_SC(): # pada penamabahan data di index ke 5 selalu loncat ke 6 walaupun 
         if response == '1':
         # update data stock card
             show_Tabel_SC(Stock_Card,Format_SC,titleSC)
-            print('\nSilahkan Lengkapi Data Berikut :')
-            tanggal = pyip.inputStr(prompt='Masukan Tanggal Transaksi (YYYY/MM/DD) : ', blockRegexes=[r'[a-zA-Z]'])
-            jenis_transaksi = pyip.inputStr(prompt='Masukkan Jenis Transaksi : ', applyFunc=lambda x: x.title(), blockRegexes=[r'[0-9]'])
-
+            print('\nPlease complete the data below:')
+            jenis_transaksi = pyip.inputStr(prompt='Enter Transaction Type (Sales or Purchase only): ', applyFunc=lambda x: x.title(), blockRegexes=[r'[0-9]'])
         # Loop item di dalam Stock_Card
             transaksi_exist = False
             for key, value in Stock_Card.copy().items():
             # Apabila transaksi sudah ada di dalam daftar
                 if key == 'column':
                     continue
-                elif tanggal and jenis_transaksi in value:
-                    print('Transaksi sudah ada')
+                elif jenis_transaksi in value:
+                    print('\n---------- TRANSACTION ALREADY EXISTS ----------')
                     transaksi_exist = True
                     break
             # Apabila transaksi tidak ada di dalam daftar
                 if not transaksi_exist: 
-                    kode_barang = pyip.inputInt(prompt='Masukkan Kode Barang : ', greaterThan=0,blockRegexes=[r'[a-zA-Z]']) 
-                    harga = pyip.inputInt(prompt='Masukan Harga Barang :', blockRegexes= float and [r'[a-zA-Z]'], greaterThan=000)
-                    qty = pyip.inputInt(prompt='Masukan Qty Barang :', blockRegexes=[r'[a-zA-Z]'], greaterThan=0)
-                    stock_balance = pyip.inputInt(prompt='Masukan Stock Balance :', blockRegexes= float and [r'[a-zA-Z]'], greaterThan=0)
-                    add = pyip.inputYesNo(prompt="\nIngin menambahkan data?(yes/no): ")
+                    tanggal = pyip.inputStr(prompt='Enter Transaction Date (YYYY/MM/DD): ', blockRegexes=[r'[a-zA-Z]'])
+                    kode_barang = pyip.inputInt(prompt='Enter Item Code: ', greaterThan=0,blockRegexes=[r'[a-zA-Z]']) 
+                    harga = pyip.inputInt(prompt='Enter Item Price:', blockRegexes= float and [r'[a-zA-Z]'], greaterThan=000)
+                    qty = pyip.inputInt(prompt='Enter Item Qty:', blockRegexes=[r'[a-zA-Z]'], greaterThan=0, lessThan=value[-1])
+                    print('\n----- How to calculate Stock Balance -----\n \nSales = Stock Balance - Qty(Sales)\nPurchase = Stock Balance + Qty(Purchase)\n')
+                    stock_balance = pyip.inputInt(prompt='Stock Balance input:', blockRegexes= float and [r'[a-zA-Z]'], greaterThan=0)
+                    add = pyip.inputYesNo(prompt="\nWant to add data? (yes/no): ")
                     if add == 'yes' or add == 'y':
                         index = len(Stock_Card)
                         Stock_Card.update({
                             f'transaksi{index}': [
-                                index, 
+                                index -1, 
                                 tanggal,
                                 kode_barang,
                                 jenis_transaksi,
@@ -126,57 +158,52 @@ def Add_SC(): # pada penamabahan data di index ke 5 selalu loncat ke 6 walaupun 
                         break
             # Menampilkan daftar stock data terbaru
             show_Tabel_SC(Stock_Card, Format_SC,titleSC)
-            Main_Menu()
+            break
         elif response == 2:
-            Main_Menu()
+            break
 
-
-def Delete_SC(): # kenapa tabel yang dihapus tidak sesuai dengan tabel yang ditampilkan per index?
+def Delete_SC(): 
     while True:
-        prompt = "Masukkan angka menu yang ingin dijalankan:\n"
+        print('\n----------------------------------------------------------\nDelete Menu Options :\n')
+        prompt = "\nEnter the number of the menu you want to run: "
         ListMenu = [
-            "1. Delete Transaksi Stock Card",
+            "1. Delete Transaction on Stock Card",
             "2. Back"
         ]
         Tampilan_SubMenu_Utama(ListMenu)
         response = input(prompt)
 
         if response == '1':
+            show_Tabel_SC(Stock_Card, Format_SC, titleSC)
             while True:
-                index = int(input("Masukkan indeks transaksi yang ingin dihapus: ")) 
-
-                if index == 0:
-                    print('Tidak diperbolehkan menghapus judul tabel.')
-                    continue
-
-                elif index >= 1 and index < len(Stock_Card):
-                    deleted_key = list(Stock_Card.keys())[index]
+                index = int(input("\nEnter the transaction index that you want to delete: ")) 
+                if index >= 0 and index < len(Stock_Card):
+                    deleted_key = list(Stock_Card.keys())[index+1]
                     show_Tabel_SC(Stock_Card, Format_SC, titleSC, index)
-                    confirm = input(f"Apakah Anda yakin ingin menghapus transaksi dengan indeks {index}? (y/n): ")
-                    if confirm.lower() == 'y':
+                    confirm = pyip.inputYesNo(f"\nAre you sure you want to clear the transaction with the index {index}? (yes/no): ")
+                    if confirm == 'yes':
                         del Stock_Card[deleted_key]
-                        print('Transaksi Stock Card berhasil dihapus.')
+                        print('\n-------- DATA SUCCESSFULLY DELETED --------')
                         show_Tabel_SC(Stock_Card,Format_SC,titleSC)  # Show updated table after deletion
                     else:
-                        print('Penghapusan transaksi dibatalkan.')
+                        print('Transaction deletion is canceled.')
                     break
-
                 else:
-                    print('Indeks transaksi tidak valid. Silahkan coba lagi.')
+                    print('Invalid transaction index. Please try again!')
 
         elif response == '2':
-            Main_Menu()
+            break
         else:
-            print('Angka yang dimasukkan tidak terdapat di List Menu. Silahkan coba lagi.')
+            print('The number entered is not in the List Menu. Please try again!')
             continue
 
 def Update_Data_SC():
     while True:
-        print('\n------------- Menu Update Data Minimarket JCDS -----------')
-        prompt = "Masukkan angka menu yang ingin dijalankan: "
-        print('\nData mana yang ingin anda ubah? ')
+        print('\n------------- Menu Data Update  -----------')
+        prompt = "Enter the number of the menu you want to run : "
+        print('\nWhich data do you want to change? ')
         ListMenuUtama_Update = [
-            "1. Update Stock Terkini",
+            "1. Update Current Stock",
             "2. Update Stock card",
             "3. Back"
         ]
@@ -188,94 +215,101 @@ def Update_Data_SC():
             show_List_Barang(ListBarang, FuncFormat)                  
             while True:    
             # meminta user input primary key
-                primary_key = pyip.inputInt(prompt='\nMasukan Kode Barang : ', blockRegexes=[r'[a-zA-Z]'], greaterThan=100)
+                primary_key = pyip.inputInt(prompt='\nEnter Item Code : ', blockRegexes=[r'[a-zA-Z]'], greaterThan=100)
                 if primary_key in ListBarang.keys():
                     print(FuncFormat.format("", *ListBarang['column']))
                     print(FuncFormat.format("", *ListBarang[primary_key]))
                     break
                 else:
-                    print('Kode barang tidak ada. Silakan coba lagi.')
+                    print('Barcode does not exist. Please Try Again!')
                 # konfirmasi apakah yakin data ini yang akan di update
             while True:
-                update = pyip.inputYesNo(prompt="\nIngin merubah data pada kode barang ini?(yes/no): ")
+                update = pyip.inputYesNo(prompt="\nWant to change the data on this item code? (yes/no): ")
                 if update == 'yes':
                 # meminta inputan kolom mana yang akan di update
                     while True:
-                        prompt = "\nMasukkan angka menu kolom yang ingin dijalankan: "
-                        print('\nData Yang Bisa Anda Ubah dan jalankan:')
+                        prompt = "\nEnter the number of the column menu you want to run: "
+                        print('\nList of data fields that you can modify: ')
                         ListMenu1 = [
-                                "1. Stock Terkini",
-                                "2. Level Stock",
+                                "1. Current Stock",
+                                "2. Level of Stock",
                                 "3. Back"
                             ]
                         Tampilan_SubMenu_Utama(ListMenu1)
                         response = input(prompt)
                 # meminta value terbaru yang akan diubah
                         if response == '1':
-                            live_stock = pyip.inputInt(prompt='Masukan jumlah stock terbaru :', blockRegexes=[r'[a-zA-Z]'], greaterThan=0)
-                            for key, value in ListBarang.items():
-                                if key == 'column':
-                                    continue
-                                elif primary_key in value:
-                                    value[4] = live_stock
-                                    break
-                                else: 
-                                    continue
-                            show_List_Barang(ListBarang,FuncFormat)                             
-                            print('\n-------- DATA BERHASIL DIPERBARUI --------') 
+                            while True:
+                                live_stock = pyip.inputInt(prompt='Enter the latest stock quantity: ', blockRegexes=[r'[a-zA-Z]'], greaterThan=0)
+                                make_sure = pyip.inputYesNo(prompt='Want to Change this Current Stock? (yes/no): ')
+                                if make_sure == 'yes':
+                                    for key, value in ListBarang.items():
+                                        if key == 'column':
+                                            continue
+                                        elif primary_key in value:
+                                            value[4] = live_stock
+                                            break
+                                        else: 
+                                            continue
+                                    show_List_Barang(ListBarang,FuncFormat)                             
+                                    print('\n-------- DATA SUCCESSFULLY UPDATED --------')
+                                else:
+                                    break 
                         elif response == '2':
-                            level_stock = pyip.inputStr(prompt='Masukkan Level Stock Terkini: ', applyFunc=lambda x: x.title())
-                            for key, value in ListBarang.items():
-                                if key == 'column':
-                                    continue
-                                elif primary_key in value:
-                                    value[5] = level_stock
+                            while True:
+                                print('\n----- Stock Level Description -----\n \n     Low Stock = Current Stock <= 150\n     Availabel = Current Stock >150\n')
+                                level_stock = pyip.inputStr(prompt='Enter Current Stock Level:', applyFunc=lambda x: x.title(), blockRegexes=[r'[0-9]'])
+                                make_sure = pyip.inputYesNo(prompt='Want to Change this Stock Level?(yes/no): ')
+                                if make_sure == 'yes':
+                                    for key, value in ListBarang.items():
+                                        if key == 'column':
+                                            continue
+                                        elif primary_key in value:
+                                            value[5] = level_stock
+                                            break
+                                    print('\n-------- DATA SUCCESSFULLY UPDATED --------')
+                                    show_List_Barang(ListBarang, FuncFormat)
                                     break
-                            print('Data berhasil diperbarui.')
-                            show_List_Barang(ListBarang, FuncFormat)
-                            break
+                                else:
+                                    break
                         elif response == '3':
                             Tampilan_SubMenu_Utama(ListMenuUtama_Update)
                             break
                 else:
-                    # Main_Menu()
                     break
-        elif response == '2':
-            
-            #while True:
+        elif response == '2':  
             show_Tabel_SC(Stock_Card, Format_SC,titleSC)
             # meminta user input index
-            index_update = pyip.inputInt(prompt='\nMasukkan Indeks Stock Card yang Ingin Diubah: ', blockRegexes=[r'[a-zA-Z]'])
+            index_update = pyip.inputInt(prompt='\nEnter the Stock Card Index that you want to change:', blockRegexes=[r'[a-zA-Z]'])
             key_update = check(Stock_Card,index_update)
             print(key_update)
             if key_update != "":
                 show_Tabel_SC(Stock_Card, Format_SC, titleSC, index_update)
-                update = pyip.inputYesNo(prompt="\nIngin merubah data pada kode barang ini?(yes/no): ")
-                #while True:
+                update = pyip.inputYesNo(prompt="\nWant to change the data on this item code? (yes/no): ")
                 if update == 'yes':
-                    tanggal = pyip.inputStr(prompt='Masukkan Tanggal Transaksi (YYYY/MM/DD): ', blockRegexes=[r'[a-zA-Z]'])
-                    kode_barang = pyip.inputInt(prompt='Masukkan Kode Barang: ',greaterThan=100, blockRegexes=[r'[a-zA-Z]'])
-                    jenis_transaksi = pyip.inputStr(prompt='Masukkan Jenis Transaksi: ', applyFunc=lambda x: x.title(), blockRegexes=[r'[0-9]'])
-                    harga = pyip.inputInt(prompt='Masukkan Harga Barang: ', greaterThan=0)
-                    qty = pyip.inputInt(prompt='Masukkan Qty Barang: ', greaterThan=0)
-                    stock_balance = pyip.inputInt(prompt='Masukkan Stock Balance: ', greaterThan=0)
+                    tanggal = pyip.inputStr(prompt='Enter the Transaction Date (YYYY/MM/DD):', blockRegexes=[r'[a-zA-Z]'])
+                    kode_barang = pyip.inputInt(prompt='Enter Item Code : ',greaterThan=100, blockRegexes=[r'[a-zA-Z]'])
+                    print('\n----- Transaction Type -----\n \nSales \nPurchase \n')
+                    jenis_transaksi = pyip.inputStr(prompt='Enter Transaction Type : ', applyFunc=lambda x: x.title(), blockRegexes=[r'[0-9]'])
+                    harga = pyip.inputInt(prompt='Enter Item Price: ', greaterThan=0)
+                    qty = pyip.inputInt(prompt='Enter Item Qty: ', greaterThan=0)
+                    stock_balance = pyip.inputInt(prompt='Enter Stock Balance: ', greaterThan=0)
                     Stock_Card[key_update][1] = tanggal
                     Stock_Card[key_update][2] = kode_barang
                     Stock_Card[key_update][3] = jenis_transaksi
                     Stock_Card[key_update][4] = qty
                     Stock_Card[key_update][5] = harga
                     Stock_Card[key_update][6] = stock_balance
-                    print('Data berhasil diperbarui.')
+                    print('\n-------- DATA UPDATED SUCCESSFULLY --------')
                     show_Tabel_SC(Stock_Card, Format_SC,titleSC)
                 else:
-                    Main_Menu()
+                    break
         elif response == '3':
             Main_Menu()    
 
 def check(database,val):
     key_update = ""
     for key, value in database.items():
-        print(key,value)
         if key == 'column':
             continue
         elif val in value:
@@ -285,15 +319,41 @@ def check(database,val):
 
 if __name__ == '__main__':
     Stock_Card = {
-        'column': ["Index", "Tanggal", "Kode Barang", "Jenis Transaksi", "Qty", "Harga", "Stock Balance"],
+        'column': ["Index", "Date", "Kode Barang", "Jenis Transaksi", "Qty", "Harga", "Stock Balance"],
         'transaksi1': [0, '2023/01/01', 101, "Saldo Awal", 150, 2000, 150],
         'transaksi2': [1, '2023/01/01', 102, "Saldo Awal", 150, 20000, 150],
         'transaksi3': [2, '2023/01/01', 201, "Saldo Awal", 150, 5000, 150],
         'transaksi4': [3, '2023/01/01', 202, "Saldo Awal", 150, 8000, 150],
-        'transaksi5': [4, '2023/01/05', 101, "Penjualan", 50, 2000, 100]        
+        'transaksi5': [4, '2023/01/05', 101, "Penjualan", 50, 2000, 100]
+       
     }
+
+    ListSC_MieInstan = {
+        'column': ["Index", "Tanggal", "Kode Barang", "Jenis Transaksi", "Qty", "Harga", "Stock Balance"],
+        'transaksiMI1': [0, '2023/01/01', 101, "Saldo Awal", 150, 2000, 150],
+        'transaksiMI5': [1, '2023/01/05', 101, "Penjualan", 50, 2000, 100] 
+    }
+    titleSC_Mie = '\n--------------- Stock Card Mie Instan ---------------'
+
+    ListSC_Sereal = {
+        'column': ["Index", "Tanggal", "Kode Barang", "Jenis Transaksi", "Qty", "Harga", "Stock Balance"],
+        'transaksiS1': [0, '2023/01/01', 102, "Saldo Awal", 150, 20000, 150],
+    }
+    titleSC_Sereal = '\n--------------- Stock Card Sereal ---------------'
+
+    ListSC_Susu = {
+        'column': ["Index", "Tanggal", "Kode Barang", "Jenis Transaksi", "Qty", "Harga", "Stock Balance"],
+        'transaksiSE1': [0, '2023/01/01', 201, "Saldo Awal", 150, 5000, 150],
+    }
+    titleSC_Susu = '\n--------------- Stock Card Susu ---------------'
+
+    ListSC_Kopi = {
+        'column': ["Index", "Tanggal", "Kode Barang", "Jenis Transaksi", "Qty", "Harga", "Stock Balance"],
+        'transaksiK1': [0, '2023/01/01', 202, "Saldo Awal", 150, 8000, 150],
+    }
+    titleSC_Kopi = '\n--------------- Stock Card Susu ---------------'
     
-    titleSC = '\n----------- Stock Card ----------\n'
+    titleSC = '\n--------------- Stock Card ---------------'
     Format_SC = "{:<4}" + "{:<8}" + "{:<15}" + "{:<15}" + "{:<20}"+ "{:<8}"+ "{:<10}" + "{:<15}"
     
     ListBarang = {
@@ -309,18 +369,4 @@ if __name__ == '__main__':
 
 
 
-''' Permasalahan:
-1.  pada regular func def update
-    - Stock Card index 0 tdk bisa di pilih yang muncul secara keseluruhan bukan index yang dipilih
-    - di Update stock terkini blm bisa menampilkan perbaris index yang dipilih
-2.  Belum kesimpan di global jadi kalau mau update/save di tampilan awal tdk berubah
-3.  def add
-    no index 5 tdk ada jadi langsung dilanjutkan ke index 6
-4. reg.func def update
 
-
-1. Di def delete no index kenapa jadi acak
-2. data yang diubah blm tersimpan diglobal
-3. def update data blm kelar
-4. blm disesuai dengan flow chart
-5. blm di edit" nama dan keterangan '''
