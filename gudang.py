@@ -31,7 +31,7 @@ def Tampilan_SubMenu_Utama(menu):
     for item in menu:
         print(item)
 
-def show_List_Barang(Dict, FuncFormat, title="\nDaftar Barang yang Tersedia\n", val=0):
+def show_List_Barang(Dict, FuncFormat, title="\n---------- Daftar Barang yang Tersedia ----------\n", val=0):
     # Function to show the list of available items
     print(title)
     for value in Dict.values():
@@ -227,8 +227,8 @@ def Update_Data_SC():
                                     break
                                 else: 
                                     continue
+                            show_List_Barang(ListBarang,FuncFormat)                             
                             print('\n-------- DATA BERHASIL DIPERBARUI --------') 
-                            show_List_Barang(ListBarang,FuncFormat) 
                         elif response == '2':
                             level_stock = pyip.inputStr(prompt='Masukkan Level Stock Terkini: ', applyFunc=lambda x: x.title())
                             for key, value in ListBarang.items():
@@ -239,44 +239,47 @@ def Update_Data_SC():
                                     break
                             print('Data berhasil diperbarui.')
                             show_List_Barang(ListBarang, FuncFormat)
-                            continue
+                            break
                         elif response == '3':
                             Tampilan_SubMenu_Utama(ListMenuUtama_Update)
                             break
-                elif response == 'no':
-                    Main_Menu()
+                else:
+                    # Main_Menu()
                     break
         elif response == '2':
-            while True:
-                show_Tabel_SC(Stock_Card, Format_SC,titleSC)
-                # meminta user input index
-                index_update = pyip.inputInt(prompt='\nMasukkan Indeks Stock Card yang Ingin Diubah: ', blockRegexes=[r'[a-zA-Z]'])
-                for key, value in Stock_Card.items():
-                    if key == 'column':
-                        continue
-                    elif index_update in value:
-                        show_Tabel_SC(Stock_Card, Format_SC, titleSC, index_update)
-                        while True:
-                            update = pyip.inputYesNo(prompt="\nIngin merubah data pada kode barang ini?(yes/no): ")
-                            if update == 'yes':
-                                tanggal = pyip.inputStr(prompt='Masukkan Tanggal Transaksi (YYYY/MM/DD): ', blockRegexes=[r'[a-zA-Z]'])
-                                kode_barang = pyip.inputStr(prompt='Masukkan Kode Barang: ',greaterThan=100, blockRegexes=[r'[a-zA-Z]'])
-                                jenis_transaksi = pyip.inputStr(prompt='Masukkan Jenis Transaksi: ', applyFunc=lambda x: x.title(), blockRegexes=[r'[0-9]'])
-                                harga = pyip.inputInt(prompt='Masukkan Harga Barang: ', greaterThan=000)
-                                qty = pyip.inputInt(prompt='Masukkan Qty Barang: ', greaterThan=0)
-                                stock_balance = pyip.inputInt(prompt='Masukkan Stock Balance: ', greaterThan=0)
-                                value[1] = tanggal
-                                value[2] = kode_barang
-                                value[3] = jenis_transaksi
-                                value[4] = qty
-                                value[5] = harga
-                                value[6] = stock_balance
-                                break
-                            elif response == 'no':
-                                Main_Menu()
-                                break
-                        print('Data berhasil diperbarui.')
-                        show_Tabel_SC(Stock_Card, Format_SC,titleSC)
+            found = False
+            #while True:
+            show_Tabel_SC(Stock_Card, Format_SC,titleSC)
+            # meminta user input index
+            index_update = pyip.inputInt(prompt='\nMasukkan Indeks Stock Card yang Ingin Diubah: ', blockRegexes=[r'[a-zA-Z]'])
+            for key, value in Stock_Card.items():
+                if key == 'column':
+                    continue
+                elif index_update in value:
+                    found = True
+                    key_update = key
+                    break
+            if found == True:
+                show_Tabel_SC(Stock_Card, Format_SC, titleSC, index_update)
+                update = pyip.inputYesNo(prompt="\nIngin merubah data pada kode barang ini?(yes/no): ")
+                #while True:
+                if update == 'yes':
+                    tanggal = pyip.inputStr(prompt='Masukkan Tanggal Transaksi (YYYY/MM/DD): ', blockRegexes=[r'[a-zA-Z]'])
+                    kode_barang = pyip.inputInt(prompt='Masukkan Kode Barang: ',greaterThan=100, blockRegexes=[r'[a-zA-Z]'])
+                    jenis_transaksi = pyip.inputStr(prompt='Masukkan Jenis Transaksi: ', applyFunc=lambda x: x.title(), blockRegexes=[r'[0-9]'])
+                    harga = pyip.inputInt(prompt='Masukkan Harga Barang: ', greaterThan=0)
+                    qty = pyip.inputInt(prompt='Masukkan Qty Barang: ', greaterThan=0)
+                    stock_balance = pyip.inputInt(prompt='Masukkan Stock Balance: ', greaterThan=0)
+                    Stock_Card[key_update][1] = tanggal
+                    Stock_Card[key_update][2] = kode_barang
+                    Stock_Card[key_update][3] = jenis_transaksi
+                    Stock_Card[key_update][4] = qty
+                    Stock_Card[key_update][5] = harga
+                    Stock_Card[key_update][6] = stock_balance
+                    print('Data berhasil diperbarui.')
+                    show_Tabel_SC(Stock_Card, Format_SC,titleSC)
+                else:
+                    Main_Menu()
         elif response == '3':
             Main_Menu()    
 
@@ -291,7 +294,7 @@ if __name__ == '__main__':
         'transaksi5': [4, '2023/01/05', 101, "Penjualan", 50, 2000, 100]        
     }
     
-    titleSC = '\n Stock Card \n'
+    titleSC = '\n----------- Stock Card ----------\n'
     Format_SC = "{:<4}" + "{:<8}" + "{:<15}" + "{:<15}" + "{:<20}"+ "{:<8}"+ "{:<10}" + "{:<15}"
     
     ListBarang = {
