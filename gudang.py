@@ -327,31 +327,6 @@ if __name__ == '__main__':
         'transaksi5': [4, '2023/01/05', 101, "Penjualan", 50, 2000, 100]
        
     }
-
-    ListSC_MieInstan = {
-        'column': ["Index", "Tanggal", "Kode Barang", "Jenis Transaksi", "Qty", "Harga", "Stock Balance"],
-        'transaksiMI1': [0, '2023/01/01', 101, "Saldo Awal", 150, 2000, 150],
-        'transaksiMI5': [1, '2023/01/05', 101, "Penjualan", 50, 2000, 100] 
-    }
-    titleSC_Mie = '\n--------------- Stock Card Mie Instan ---------------'
-
-    ListSC_Sereal = {
-        'column': ["Index", "Tanggal", "Kode Barang", "Jenis Transaksi", "Qty", "Harga", "Stock Balance"],
-        'transaksiS1': [0, '2023/01/01', 102, "Saldo Awal", 150, 20000, 150],
-    }
-    titleSC_Sereal = '\n--------------- Stock Card Sereal ---------------'
-
-    ListSC_Susu = {
-        'column': ["Index", "Tanggal", "Kode Barang", "Jenis Transaksi", "Qty", "Harga", "Stock Balance"],
-        'transaksiSE1': [0, '2023/01/01', 201, "Saldo Awal", 150, 5000, 150],
-    }
-    titleSC_Susu = '\n--------------- Stock Card Susu ---------------'
-
-    ListSC_Kopi = {
-        'column': ["Index", "Tanggal", "Kode Barang", "Jenis Transaksi", "Qty", "Harga", "Stock Balance"],
-        'transaksiK1': [0, '2023/01/01', 202, "Saldo Awal", 150, 8000, 150],
-    }
-    titleSC_Kopi = '\n--------------- Stock Card Susu ---------------'
     
     titleSC = '\n--------------- Stock Card ---------------'
     Format_SC = "{:<4}" + "{:<8}" + "{:<15}" + "{:<15}" + "{:<20}"+ "{:<8}"+ "{:<10}" + "{:<15}"
