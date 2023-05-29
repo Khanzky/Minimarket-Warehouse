@@ -185,19 +185,13 @@ def Update_Data_SC():
 
         if response == '1':
             # menampilkan data terkini
-            show_List_Barang(ListBarang, FuncFormat)
-            key_exists = False                    
+            show_List_Barang(ListBarang, FuncFormat)                  
             while True:    
             # meminta user input primary key
                 primary_key = pyip.inputInt(prompt='\nMasukan Kode Barang : ', blockRegexes=[r'[a-zA-Z]'], greaterThan=100)
-                for key, value in ListBarang.items():
-                    if key == 'column':
-                        continue
-                    elif primary_key in value:
-                        key_exists = True
-                        show_List_Barang(ListBarang,FuncFormat,primary_key)
-                        break
-                if key_exists:
+                if primary_key in ListBarang.keys():
+                    print(FuncFormat.format("", *ListBarang['column']))
+                    print(FuncFormat.format("", *ListBarang[primary_key]))
                     break
                 else:
                     print('Kode barang tidak ada. Silakan coba lagi.')
@@ -247,19 +241,14 @@ def Update_Data_SC():
                     # Main_Menu()
                     break
         elif response == '2':
-            found = False
+            
             #while True:
             show_Tabel_SC(Stock_Card, Format_SC,titleSC)
             # meminta user input index
             index_update = pyip.inputInt(prompt='\nMasukkan Indeks Stock Card yang Ingin Diubah: ', blockRegexes=[r'[a-zA-Z]'])
-            for key, value in Stock_Card.items():
-                if key == 'column':
-                    continue
-                elif index_update in value:
-                    found = True
-                    key_update = key
-                    break
-            if found == True:
+            key_update = check(Stock_Card,index_update)
+            print(key_update)
+            if key_update != "":
                 show_Tabel_SC(Stock_Card, Format_SC, titleSC, index_update)
                 update = pyip.inputYesNo(prompt="\nIngin merubah data pada kode barang ini?(yes/no): ")
                 #while True:
@@ -283,6 +272,16 @@ def Update_Data_SC():
         elif response == '3':
             Main_Menu()    
 
+def check(database,val):
+    key_update = ""
+    for key, value in database.items():
+        print(key,value)
+        if key == 'column':
+            continue
+        elif val in value:
+            key_update = key
+            break
+    return key_update
 
 if __name__ == '__main__':
     Stock_Card = {
@@ -299,11 +298,11 @@ if __name__ == '__main__':
     
     ListBarang = {
         'column': ["Index", "Kode Barang", "Nama Barang", "Jenis Barang", "Stock Terkini", "Level Stock"],
-        'barang1': [0, 101, "Mie Instan", "Makanan", 100, "Low Stock"],
-        'barang2': [1, 102, "Sereal", "Makanan", 150, "Available"],
-        'barang3': [2, 201, "Susu", "Minuman", 150, "Available"],
-        'barang4': [3, 202, "Kopi", "Minuman", 150, "Available"],
-    } # yang dibuat fungsi input hanya stock terkini trs level stock dibuat if
+        101: [0, 101, "Mie Instan", "Makanan", 100, "Low Stock"],
+        102: [1, 102, "Sereal", "Makanan", 150, "Available"],
+        201: [2, 201, "Susu", "Minuman", 150, "Available"],
+        202: [3, 202, "Kopi", "Minuman", 150, "Available"],
+    } 
 
     FuncFormat = "{:<4}" + "{:<8}" + "{:<15}" + "{:<15}" + "{:<15}"+ "{:<15}"+ "{:<15}"
     Main_Menu()
