@@ -1,5 +1,6 @@
 import sys
 import pyinputplus as pyip
+import os
 
 def Main_Menu():
     global ListBarang
@@ -253,6 +254,7 @@ def Update_Data_SC():
                                             continue
                                     show_List_Barang(ListBarang,FuncFormat)                             
                                     print('\n-------- DATA SUCCESSFULLY UPDATED --------')
+                                    break
                                 else:
                                     break 
                         elif response == '2':
@@ -318,21 +320,24 @@ def check(database,val):
     return key_update
 
 if __name__ == '__main__':
+    # Path CSV
+    
+    # check database, if empty display a message
+    
     Stock_Card = {
-        'column': ["Index", "Date", "Kode Barang", "Jenis Transaksi", "Qty", "Harga", "Stock Balance"],
+        'column': ["Index", "Date", "Item Code", "Type of Transaction", "Qty", "Price", "Stock Balance"],
         'transaksi1': [0, '2023/01/01', 101, "Saldo Awal", 150, 2000, 150],
         'transaksi2': [1, '2023/01/01', 102, "Saldo Awal", 150, 20000, 150],
         'transaksi3': [2, '2023/01/01', 201, "Saldo Awal", 150, 5000, 150],
         'transaksi4': [3, '2023/01/01', 202, "Saldo Awal", 150, 8000, 150],
         'transaksi5': [4, '2023/01/05', 101, "Penjualan", 50, 2000, 100]
-       
     }
     
     titleSC = '\n--------------- Stock Card ---------------'
     Format_SC = "{:<4}" + "{:<8}" + "{:<15}" + "{:<15}" + "{:<20}"+ "{:<8}"+ "{:<10}" + "{:<15}"
     
     ListBarang = {
-        'column': ["Index", "Kode Barang", "Nama Barang", "Jenis Barang", "Stock Terkini", "Level Stock"],
+        'column': ["Index", "Item Code", "Name of Item", "Type of Item", "Current Stock", "Level of Stock"],
         101: [0, 101, "Mie Instan", "Makanan", 100, "Low Stock"],
         102: [1, 102, "Sereal", "Makanan", 150, "Available"],
         201: [2, 201, "Susu", "Minuman", 150, "Available"],
