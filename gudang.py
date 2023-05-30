@@ -1,6 +1,5 @@
 import sys
 import pyinputplus as pyip
-import os
 
 def Main_Menu():
     global ListBarang
@@ -76,8 +75,8 @@ def Sub_Menu():
 
         if response == '1':
             while True:
-                print('\n----------------------------------------------------------\nStatus and Current Stock Itemn Menu Options :\n')
-                prompt = "Enter the number of the menu you want to run : \n"
+                print('\n----------------------------------------------------------\nCurrent Item Status and Stock Menu Options :\n')
+                prompt = "Enter the number of the menu you want to run : "
                 List_MenuSC = [
                     "1. Summary of stock items ",
                     "2. Stock by Barcode Product",
@@ -166,8 +165,8 @@ def Add_SC():
             # Menampilkan daftar stock data terbaru
             show_Tabel_SC(Stock_Card, Format_SC,titleSC)
             break
-        elif response == 2:
-            break
+        elif response == '2':
+            Main_Menu()
 
 def Delete_SC(): 
     while True:
@@ -175,6 +174,7 @@ def Delete_SC():
         prompt = "\nEnter the number of the menu you want to run: "
         ListMenu = [
             "1. Delete Transaction on Stock Card",
+            "2. Delete All Transaction of Stock Card",
             "2. Back"
         ]
         Tampilan_SubMenu_Utama(ListMenu)
@@ -199,6 +199,18 @@ def Delete_SC():
                     print('Invalid transaction index. Please try again!')
 
         elif response == '2':
+            show_Tabel_SC(Stock_Card,Format_SC,titleSC)
+            delete = pyip.inputYesNo(prompt='Do you want to delete all? (yes/no)')
+            if delete == 'yes':
+                for key in Stock_Card.copy().keys():
+                    if key == 'column':
+                        continue
+                    del Stock_Card[key]
+                print('\n-------- ALL DATA SUCCESSFULLY DELETED --------')
+                show_Tabel_SC(Stock_Card,Format_SC,titleSC)
+                Main_Menu()
+                break
+        elif response == '3':
             break
         else:
             print('The number entered is not in the List Menu. Please try again!')
@@ -281,9 +293,11 @@ def Update_Data_SC():
                                 else:
                                     break
                         elif response == '3':
-                            Tampilan_SubMenu_Utama(ListMenuUtama_Update)
+                            continue
+                        else:
+                            print('Menu options not available')
                 else:
-                    break
+                    Main_Menu()
         elif response == '2':  
             show_Tabel_SC(Stock_Card, Format_SC,titleSC)
             # meminta user input index
@@ -296,23 +310,31 @@ def Update_Data_SC():
                 if update == 'yes':
                     tanggal = pyip.inputStr(prompt='Enter the Transaction Date (YYYY/MM/DD):', blockRegexes=[r'[a-zA-Z]'])
                     kode_barang = pyip.inputInt(prompt='Enter Item Code : ',greaterThan=100, blockRegexes=[r'[a-zA-Z]'])
-                    print('\n----- Transaction Type -----\n \nSales \nPurchase \n')
-                    jenis_transaksi = pyip.inputStr(prompt='Enter Transaction Type : ', applyFunc=lambda x: x.title(), blockRegexes=[r'[0-9]'])
-                    harga = pyip.inputInt(prompt='Enter Item Price: ', greaterThan=0)
-                    qty = pyip.inputInt(prompt='Enter Item Qty: ', greaterThan=0)
-                    stock_balance = pyip.inputInt(prompt='Enter Stock Balance: ', greaterThan=0)
-                    Stock_Card[key_update][1] = tanggal
-                    Stock_Card[key_update][2] = kode_barang
-                    Stock_Card[key_update][3] = jenis_transaksi
-                    Stock_Card[key_update][4] = qty
-                    Stock_Card[key_update][5] = harga
-                    Stock_Card[key_update][6] = stock_balance
-                    print('\n-------- DATA UPDATED SUCCESSFULLY --------')
-                    show_Tabel_SC(Stock_Card, Format_SC,titleSC)
+                    for j, val in enumerate(Stock_Card.values()):
+                        if kode_barang in val:
+                            print('\n----- Transaction Type -----\n \nBeginning balance\nSales \nPurchase \n')
+                            jenis_transaksi = pyip.inputStr(prompt='Enter Transaction Type : ', applyFunc=lambda x: x.title(), blockRegexes=[r'[0-9]'])
+                            harga = pyip.inputInt(prompt='Enter Item Price: ', greaterThan=0)
+                            qty = pyip.inputInt(prompt='Enter Item Qty: ', greaterThan=0)
+                            stock_balance = pyip.inputInt(prompt='Enter Stock Balance: ', greaterThan=0)
+                            Stock_Card[key_update][1] = tanggal
+                            Stock_Card[key_update][2] = kode_barang
+                            Stock_Card[key_update][3] = jenis_transaksi
+                            Stock_Card[key_update][4] = qty
+                            Stock_Card[key_update][5] = harga
+                            Stock_Card[key_update][6] = stock_balance
+                            print('\n-------- DATA UPDATED SUCCESSFULLY --------')
+                            show_Tabel_SC(Stock_Card, Format_SC,titleSC)
+                            break
+                        elif j == len(Stock_Card) - 1:
+                            print('Kode barang tidak tersedia')
+                            continue
                 else:
                     break
         elif response == '3':
-            Main_Menu()    
+            Main_Menu() 
+        else:
+            print('Menu options not available')   
 
 def check(database,val):
     key_update = ""
@@ -331,15 +353,15 @@ if __name__ == '__main__':
     
     Stock_Card = {
         'column': ["Index", "Date", "Item Code", "Type of Transaction", "Qty", "Price", "Stock Balance"],
-        'transaksi1': [0, '2023/01/01', 101, "Saldo Awal", 150, 2000, 150],
-        'transaksi2': [1, '2023/01/01', 102, "Saldo Awal", 150, 20000, 150],
-        'transaksi3': [2, '2023/01/01', 201, "Saldo Awal", 150, 5000, 150],
-        'transaksi4': [3, '2023/01/01', 202, "Saldo Awal", 150, 8000, 150],
-        'transaksi5': [4, '2023/01/05', 101, "Penjualan", 50, 2000, 100]
+        'transaksi1': [0, '2023/01/01', 101, "Beginning Balance", 150, 2000, 150],
+        'transaksi2': [1, '2023/01/01', 102, "Beginning balance", 150, 20000, 150],
+        'transaksi3': [2, '2023/01/01', 201, "Beginning balance", 150, 5000, 150],
+        'transaksi4': [3, '2023/01/01', 202, "Beginning balance", 150, 8000, 150],
+        'transaksi5': [4, '2023/01/05', 101, "Sales", 50, 2000, 100]
     }
     
     titleSC = '\n--------------- Stock Card ---------------'
-    Format_SC = "{:<4}" + "{:<8}" + "{:<15}" + "{:<15}" + "{:<20}"+ "{:<8}"+ "{:<10}" + "{:<15}"
+    Format_SC = "{:<4}" + "{:<8}" + "{:<15}" + "{:<15}" + "{:<25}"+ "{:<8}"+ "{:<10}" + "{:<15}"
     
     ListBarang = {
         'column': ["Index", "Item Code", "Name of Item", "Type of Item", "Current Stock", "Level of Stock"],
