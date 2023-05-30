@@ -5,7 +5,7 @@ def Main_Menu():
     global ListBarang
     global Stock_Card
     print(f'''
--------- Welcome to The Purwadhika Jogja Warehouse --------
+-------- Welcome to The Purwadhika Jogja Minimarket Warehouse --------
     ''')
     # menginput fitur yang ingin ditampilkan 
     prompt = "Main Menu Options :\n"
