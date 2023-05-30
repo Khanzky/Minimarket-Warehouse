@@ -35,26 +35,32 @@ def Tampilan_SubMenu_Utama(menu):
         print(item)
 
 def show_List_Barang(Dict, FuncFormat, title="\n---------- Daftar Barang yang Tersedia ----------\n", val=0):
-    # Function to show the list of available items
-    print(title)
-    for value in Dict.values():
-        if val == 0:
-            print(FuncFormat.format("", *value))
-        else:
-            if val in value:
+    if len(Dict) == 0 or 'column' not in Dict.keys():
+        print('\n---------- Data is Empty ------------')
+    else:
+        # Function to show the list of available items
+        print(title)
+        for value in Dict.values():
+            if val == 0:
                 print(FuncFormat.format("", *value))
-                break
+            else:
+                if val in value:
+                    print(FuncFormat.format("", *value))
+                    break
 
 def show_Tabel_SC(Dict, Format_SC, titleSC, val=0):
-    # Function to display the stock card table
-    print(titleSC)
-    for value in Dict.values():
-        if val == 0:
-            print(Format_SC.format("", *value))
-        else:
-            if val in value:
-                print(Format_SC.format("", *value)) 
-                break
+    if len(Dict) == 0 or 'column' not in Dict.keys():
+        print('\n---------- Data is Empty ------------')
+    else:
+        # Function to display the stock card table
+        print(titleSC)
+        for value in Dict.values():
+            if val == 0:
+                print(Format_SC.format("", *value))
+            else:
+                if val in value:
+                    print(Format_SC.format("", *value)) 
+                    break
                 
 def Sub_Menu():
     while True:
@@ -276,7 +282,6 @@ def Update_Data_SC():
                                     break
                         elif response == '3':
                             Tampilan_SubMenu_Utama(ListMenuUtama_Update)
-                            break
                 else:
                     break
         elif response == '2':  
