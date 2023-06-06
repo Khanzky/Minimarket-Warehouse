@@ -19,8 +19,8 @@ To install requitment with pip, run:
 ## Quickstart Guide
 
 1. Show Menu
-    To run the "Show Menu" option in the main menu, you need to follow these steps:
-        - Execute the `Main_Menu()` function. This function displays the main menu options to the user and prompts for a choice.
+`To run the "Show Menu" option in the main menu, you need to follow these steps:
+    - Execute the `Main_Menu()` function. This function displays the main menu options to the user and prompts for a choice.
             In the main menu: 
             1. "Show menu," 
             2. "Update Transaction Data and Stock Card," 
@@ -39,19 +39,19 @@ To install requitment with pip, run:
         - This process continues until the user selects the "Exit" option in the main menu, which terminates the program.
 
 2. Update Transaction Data and Stock Card
-        To run the "Update Transaction Data and Stock Card" option in the main menu, you need to follow these steps:
-        1. Execute the `Main_Menu()` function. This function displays the main menu options to the user and prompts for a choice.
-        2. The `pyip.inputMenu()` function is used to present the menu options to the user and receive their choice. 
-        3. Once the user selects an option, the chosen option is stored in the `response` variable.
-        5. If the `response` matches the second choice, which is "Update Transaction Data and Stock Card," the `Update_Data_SC()` function is called.
-        6. The `Update_Data_SC()` function prompts the user to enter the transaction details.
-        7. The function validates the input and checks if the item code exists in the `ListBarang` dictionary. 
-           If the code is valid and the item exists, the transaction details are added to the corresponding item's transaction list.
-        9. Additionally, the stock card record is updated with the transaction details, including the transaction ID, date, quantity, and transaction type.
-        10. After updating the transaction data and stock card, the control returns to the main menu, and the user is again prompted for a choice.
+`To run the "Update Transaction Data and Stock Card" option in the main menu, you need to follow these steps:
+    - Execute the `Main_Menu()` function. This function displays the main menu options to the user and prompts for a choice.
+    - The `pyip.inputMenu()` function is used to present the menu options to the user and receive their choice. 
+    - Once the user selects an option, the chosen option is stored in the `response` variable.
+    - If the `response` matches the second choice, which is "Update Transaction Data and Stock Card," the `Update_Data_SC()` function is called.
+    - The `Update_Data_SC()` function prompts the user to enter the transaction details.
+    - The function validates the input and checks if the item code exists in the `ListBarang` dictionary. 
+       If the code is valid and the item exists, the transaction details are added to the corresponding item's transaction list.
+    - Additionally, the stock card record is updated with the transaction details, including the transaction ID, date, quantity, and transaction type.
+    - After updating the transaction data and stock card, the control returns to the main menu, and the user is again prompted for a choice.
   
 3. Add Data Stock Card 
-        To run the "Add Data Stock Card" option in the main menu, you can follow these steps:
+To run the "Add Data Stock Card" option in the main menu, you can follow these steps:
         - Execute the `Main_Menu()` function. This function displays the main menu options to the user and prompts for a choice.
         - The `pyip.inputMenu()` function is used to present the menu options to the user and receive their choice. 
         - Once the user selects an option, the chosen option is stored in the `response` variable.
@@ -62,10 +62,10 @@ To install requitment with pip, run:
         - If the item code is unique, 
            The function adds a new entry to the `ListBarang` dictionary:
            the item code as the key and a list containing the item name, initial stock quantity, and an empty transaction list as the value.
-        11. After successfully adding the data to the stock card, the control returns to the main menu, and the user is again prompted for a choice.
+        - After successfully adding the data to the stock card, the control returns to the main menu, and the user is again prompted for a choice.
 
 4. Delete Data Stock Card
-        To run the "Delete Data Stock Card" option in the main menu, you can follow these steps:
+To run the "Delete Data Stock Card" option in the main menu, you can follow these steps:`
         - Execute the `Main_Menu()` function. This function displays the main menu options to the user and prompts for a choice.
         - The `pyip.inputMenu()` function is used to present the menu options to the user and receive their choice. 
         - Once the user selects an option, the chosen option is stored in the `response` variable.
@@ -77,7 +77,8 @@ To install requitment with pip, run:
         - After successfully deleting the data from the stock card, the control returns to the main menu, and the user is again prompted for a choice.
 
 5. Exit
-        To run the "Exit" option in the main menu, you can follow these steps:
+
+    `To run the "Exit" option in the main menu, you can follow these steps:
         - Execute the `Main_Menu()` function. This function displays the main menu options to the user and prompts for a choice.
         - The `pyip.inputMenu()` function is used to present the menu options to the user and receive their choice.
         - Once the user selects an option, the chosen option is stored in the `response` variable.
