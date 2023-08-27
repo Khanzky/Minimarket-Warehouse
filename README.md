@@ -1,4 +1,4 @@
-# Purwadhika Jogja Minimarket Warehouse
+# Minimarket Warehouse
 
 A simple application with the python programming language used by Purwadhika Jogja Minimarket Warehouse
 to check, change, add, and delete stock data and stock card reports.
